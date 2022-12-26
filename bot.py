@@ -119,9 +119,10 @@ def price_command(update, context):
 def weather_command(update, context):
     # Get the chat ID of the conversation
     chat_id = update.effective_chat.id
-
+    # Get the location from the command arguments
+    location = " ".join(context.args)
     # Make a request to the wttr.in API
-    response = requests.get("http://vi.wttr.in/Ho Chi Minh City?format=%C\n%T\n%w\n%t")
+    response = requests.get(f"http://vi.wttr.in/{location}?format=%l\n%C\n%T%m\n%w\n%t%c")
 
     # Send the weather information to the user
     context.bot.send_message(chat_id=chat_id, text=response.text)
