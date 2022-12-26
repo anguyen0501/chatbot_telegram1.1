@@ -1,5 +1,3 @@
-import googletrans
-
 import Constants as keys
 import Response as R
 from telegram import Update, ReplyKeyboardMarkup, bot
@@ -125,12 +123,8 @@ def weather_command(update, context):
     # Make a request to the wttr.in API
     response = requests.get("http://wttr.in/Ho Chi Minh City?format=%C\n%T\n%w\n%t")
 
-    # Translate the weather information to Vietnamese
-    translator = googletrans.Translator()
-    vietnamese_text = translator.translate(response.text, dest="vi").text
-
     # Send the weather information to the user
-    context.bot.send_message(chat_id=chat_id, text=vietnamese_text)
+    context.bot.send_message(chat_id=chat_id, text=response.text)
 
 
 def export_history(update, context):
