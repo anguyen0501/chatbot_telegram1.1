@@ -4,6 +4,8 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters
 import json
 from Method.News import News
+from googletrans import LANGUAGES, Translator
+import random
 
 
 print("Bot Starting....")
@@ -39,6 +41,14 @@ def file_command(update: Update, context: CallbackContext) -> None:
     context.bot.send_document(chat_id, file)
 
 
+def translate_command(update: Update, context: CallbackContext) -> None:
+    message = update.message.text
+    dest_lang = random.choice(list(LANGUAGES.value()))
+    translator = Translator()
+    translation = translator.translate(message, dest=dest_lang)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=translation.text)
+
+
 def handle_message(update: Update, context: CallbackContext):
     text = str(update.message.text).lower()
     response = R.sample_response(text)
@@ -58,6 +68,7 @@ def main():
     dp.add_handler(CommandHandler("news", news_command))
     dp.add_handler(CommandHandler("image", photo_command))
     dp.add_handler(CommandHandler("send", file_command))
+    dp.add_handler(CommandHandler("translate", translate_command))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
     dp.add_error_handler(error)
 
