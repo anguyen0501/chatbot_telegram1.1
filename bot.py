@@ -168,7 +168,7 @@ def main():
     dp.add_handler(CommandHandler("weather", weather_command))
     dp.add_handler(CommandHandler("save", export_history))
     dp.add_handler(CallbackQueryHandler(button_press))
-    dp.add_handler(CommandHandler("ask_question", ask_question))
+    dp.add_handler(CommandHandler("ask1", ask_question))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
     dp.add_error_handler(error)
 
