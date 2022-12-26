@@ -9,5 +9,7 @@ def sample_response(input):
     if user_mess in ("time", "time?"):
         now = "Hôm nay là: " + datetime.now().strftime("%d-%m-%y, %H:%M:%S")
         return str(now)
+    if user_mess in "bye":
+        return "Goodbye, see you later"
 
     return "Hỏi gì đó khác đi bro? Hỏi khó như này thì chịu rồi :<"
