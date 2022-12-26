@@ -121,7 +121,7 @@ def weather_command(update, context):
     chat_id = update.effective_chat.id
 
     # Make a request to the wttr.in API
-    response = requests.get("http://wttr.in/Ho Chi Minh City?format=%C\n%T\n%w\n%t")
+    response = requests.get("http://vi.wttr.in/Ho Chi Minh City?format=%C\n%T\n%w\n%t")
 
     # Send the weather information to the user
     context.bot.send_message(chat_id=chat_id, text=response.text)
