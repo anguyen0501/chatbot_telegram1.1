@@ -1,3 +1,5 @@
+import googletrans
+
 import Constants as keys
 import Response as R
 from telegram import Update, ReplyKeyboardMarkup, bot
@@ -117,18 +119,18 @@ def price_command(update, context):
 
 
 def weather_command(update, context):
-    # Make a request to the OpenWeatherMap API for the weather in Ho Chi Minh City
-    response = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=Ho%20Chi%20Minh%20City&appid" + keys.OWM_KEY)
-    # Extract the weather data from the response
-    data = response.json()
-    temperature = data["main"]["temp"] - 273.15  # Convert from Kelvins to Celsius
-    weather = data["weather"][0]["main"]
+    # Get the chat ID of the conversation
+    chat_id = update.effective_chat.id
 
-    # Send the weather data to the user
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=f"The weather in Ho Chi Minh City is currently {weather.lower()} with a temperature "
-                                  f"of {temperature:.1f}°C.")
+    # Make a request to the wttr.in API
+    response = requests.get("http://wttr.in/Ho Chi Minh City?format=%C\n%T\n%w\n%t")
+
+    # Translate the weather information to Vietnamese
+    translator = googletrans.Translator()
+    vietnamese_text = translator.translate(response.text, dest="vi").text
+
+    # Send the weather information to the user
+    context.bot.send_message(chat_id=chat_id, text=vietnamese_text)
 
 
 def export_history(update, context):
