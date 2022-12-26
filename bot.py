@@ -130,7 +130,7 @@ def weather_command(update, context):
     vietnamese_text = translator.translate(response.text, dest="vi").text
 
     # Send the weather information to the user
-    bot.send_message(chat_id=chat_id, text=vietnamese_text)
+    context.bot.send_message(chat_id=chat_id, text=vietnamese_text)
 
 
 def export_history(update, context):
