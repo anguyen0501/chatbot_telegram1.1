@@ -1,2 +1,4 @@
-# chatbot_telegram1.1
-chatbot_telegram
+# chatbot_telegram1.1 by Python
+# IDE : Pycharm
+# Telegram API
+ 

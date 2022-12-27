@@ -10,13 +10,15 @@ import requests
 import ccxt
 import html
 import datetime
+from Method.Youtube.Youtube import search_youtube
 
 print("Bot Starting....")
 
 
 def start_command(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(f'Xin chào {update.effective_user.first_name}, đây là bot chat tự động, vui lòng /help '
-                              f'để được giúp đỡ !!!')
+    update.message.reply_text(f'Xin chào {update.effective_user.first_name}, đây là bot chat tự động phiên bản đầu '
+                              f'tiên, vui lòng /help '
+                              f'để được giúp đỡ !!! Xin cảm ơn')
 
 
 def help_command(update: Update, context: CallbackContext):
@@ -26,7 +28,8 @@ def help_command(update: Update, context: CallbackContext):
                               "\n 3. Bức ảnh bất kì -> /imagee"
                               "\n 4. Xem giá BTC -> /price"
                               "\n 4. Dịch ngôn ngữ -> /translate"
-                              "\n 5. Câu đố -> /ask1")
+                              "\n 5. Câu đố -> /ask1"
+                              "\n 6. Xem youtube -> /youtube [tên muốn tìm]")
 
 
 def news_command(update: Update, context: CallbackContext):
@@ -39,10 +42,6 @@ def news_command(update: Update, context: CallbackContext):
                                       + message['link'] + "\n" + message['description'])
     except (IndexError, ValueError):
         update.message.reply_text('Vui lòng chọn số lượng tin hiển thị!!')
-
-
-def photo_command(update: Update, context: CallbackContext) -> None:
-    update.message.reply_photo("https://picsum.photos/200")
 
 
 def file_command(update: Update, context: CallbackContext) -> None:
@@ -150,6 +149,25 @@ def weather_command(update, context):
     context.bot.send_message(chat_id=chat_id, text=response.text)
 
 
+# Use the `search_youtube` function to search for and retrieve a link to a YouTube video
+def youtube_command(update, context):
+    # Extract the search query from the command
+    query = update.message.text.split(" ", 1)[1]
+
+    # Search for the video and send the link to the user
+    link = search_youtube(query)
+    bot.send_message(chat_id=update.message.chat_id, text=link)
+
+
+def facebook_command(update: telegram.Update, context: CallbackContext):
+    bot.send_message(chat_id=update.message.chat_id, text="An Nguyễn : "
+                                                          "https://www.facebook.com/ankronee/\n"
+                                                          "Nguyễn Bình Trọng : https://www.facebook.com/Btrong1\n"
+                                                          "Nguyễn Trường Vinh : https://www.facebook.com/profile.php"
+                                                          "?id=100011912614150\n "
+                                                          "Nguyễn Văn Thơ : https://www.facebook.com/Ther.Nguyen0106\n")
+
+
 def handle_message(update: Update, context: CallbackContext):
     text = str(update.message.text).lower()
     response = R.sample_response(text)
@@ -167,7 +185,7 @@ def handle_message(update: Update, context: CallbackContext):
 
     # Write the message to an HTML file
     with open("chat_history.html", "a", encoding='utf-8') as html_file:
-        html_file.write('<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<title>Save History Chatbot '
+        html_file.write('<head>\n<meta charset="UTF-8">\n<title>Save History Chatbot '
                         'Telegram</title>\n</head>\n<body>\n')
         html_file.write(
             f"<p><b>{html.escape(username)}</b> ({now.strftime('%Y-%m-%d %H:%M:%S')}): {html.escape(text)} </p>\n"
@@ -185,7 +203,6 @@ def main():
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("news", news_command))
-    dp.add_handler(CommandHandler("image", photo_command))
     dp.add_handler(CommandHandler("send", file_command))
     dp.add_handler(CommandHandler("imagee", imgRandom_command))
     dp.add_handler(CommandHandler("price", price_command))
@@ -193,6 +210,8 @@ def main():
     dp.add_handler(CallbackQueryHandler(button_press))
     dp.add_handler(CommandHandler("ask", ask_question))
     dp.add_handler(CommandHandler('translate', translate_command))
+    dp.add_handler(CommandHandler("youtube", youtube_command))
+    dp.add_handler(CommandHandler('fb', facebook_command))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
     dp.add_error_handler(error)
 

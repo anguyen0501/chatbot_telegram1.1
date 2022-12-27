@@ -11,5 +11,7 @@ def sample_response(input):
         return str(now)
     if user_mess in "bye":
         return "Tạm biệt, hẹn gặp lại nhé!"
+    if user_mess in "fb":
+        return "Chào bạn, tôi có thể giúp gì cho bạn không?"
 
     return "Lệnh sai rồi, vui lòng kiểm tra lại!"
