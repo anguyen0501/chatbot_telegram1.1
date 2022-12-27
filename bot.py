@@ -1,3 +1,5 @@
+import googletrans
+
 import Constants as keys
 import Response as R
 from telegram import Update, ReplyKeyboardMarkup, bot
@@ -51,11 +53,16 @@ def file_command(update: Update, context: CallbackContext) -> None:
 
 
 def translate_command(update, context) -> None:
+    # Get the user's message and the target language from the command
     message = update.message.text
-    dest_lang = random.choice(list(LANGUAGES.values()))
-    translator = Translator()
-    translation = translator.translate(message, dest=dest_lang)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=translation.text)
+    target_language = message.split()[1]
+
+    # Use googletrans to detect the language of the message and translate it
+    translator = googletrans.Translator()
+    translated_text = translator.translate(message, dest=target_language).text
+
+    # Send the translated message back to the user
+    context.bot.send_message(chat_id=update.effective_chat.id, text=translated_text)
 
 
 # Define the correct answer and the options
@@ -147,6 +154,12 @@ def export_history(update, context):
         json.dump(history, f)
 
 
+def send_message(update: Update, context: CallbackContext):
+    text = str(update.message.text).lower()
+    chat_id = update.effective_chat.id
+    context.bot.send_message(chat_id=chat_id, text=text)
+
+
 def handle_message(update: Update, context: CallbackContext):
     text = str(update.message.text).lower()
     response = R.sample_response(text)
@@ -174,6 +187,7 @@ def main():
     dp.add_handler(CallbackQueryHandler(button_press))
     dp.add_handler(CommandHandler("ask1", ask_question))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
+    dp.add_handler(MessageHandler(Filters.text, send_message))
     dp.add_error_handler(error)
 
     # Start the bot

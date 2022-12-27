@@ -5,11 +5,11 @@ def sample_response(input):
     user_mess = str(input).lower()
 
     if user_mess in ("hi", "hello", "ok"):
-        return "Hi Bro :v"
+        return "Chào bạn!!!"
     if user_mess in ("time", "time?"):
         now = "Hôm nay là: " + datetime.now().strftime("%d-%m-%y, %H:%M:%S")
         return str(now)
     if user_mess in "bye":
-        return "Goodbye, see you later"
+        return "Tạm biệt, hẹn gặp lại nhé!"
 
-    return "Hỏi gì đó khác đi bro? Hỏi khó như này thì chịu rồi :<"
+    return "Lệnh sai rồi, vui lòng kiểm tra lại!"
