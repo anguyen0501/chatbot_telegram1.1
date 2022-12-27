@@ -5,7 +5,7 @@ def sample_response(input):
     user_mess = str(input).lower()
 
     if user_mess in ("hi", "hello", "ok"):
-        return "Chào bạn!!!"
+        return "Chào bạn, tôi có thể giúp gì cho bạn không?"
     if user_mess in ("time", "time?"):
         now = "Hôm nay là: " + datetime.now().strftime("%d-%m-%y, %H:%M:%S")
         return str(now)

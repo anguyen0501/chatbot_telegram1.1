@@ -1,16 +1,15 @@
-import googletrans
-
 import Constants as keys
 import Response as R
-from telegram import Update, ReplyKeyboardMarkup, bot
+from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters, CallbackQueryHandler
 import json
 import telegram
 from Method.News import News
-from googletrans import LANGUAGES, Translator
-import random
+import googletrans
 import requests
 import ccxt
+import html
+import datetime
 
 print("Bot Starting....")
 
@@ -52,17 +51,26 @@ def file_command(update: Update, context: CallbackContext) -> None:
     context.bot.send_document(chat_id, file)
 
 
+bot = telegram.Bot(token=keys.API_KEY)
+
+
 def translate_command(update, context) -> None:
-    # Get the user's message and the target language from the command
-    message = update.message.text
-    target_language = message.split()[1]
+    # Get the chat ID of the conversation
+    chat_id = update.effective_chat.id
 
-    # Use googletrans to detect the language of the message and translate it
+    # Get the source language and target language from the command arguments
+    src_lang = context.args[0]
+    dest_lang = context.args[1]
+
+    # Get the text to be translated from the command arguments
+    text = " ".join(context.args[2:])
+
+    # Translate the text
     translator = googletrans.Translator()
-    translated_text = translator.translate(message, dest=target_language).text
+    translated_text = translator.translate(text, src=src_lang, dest=dest_lang).text
 
-    # Send the translated message back to the user
-    context.bot.send_message(chat_id=update.effective_chat.id, text=translated_text)
+    # Send the translated text to the user
+    bot.send_message(chat_id=chat_id, text=translated_text)
 
 
 # Define the correct answer and the options
@@ -142,28 +150,28 @@ def weather_command(update, context):
     context.bot.send_message(chat_id=chat_id, text=response.text)
 
 
-def export_history(update, context):
-    # Get the chat ID of the conversation
-    chat_id = update.effective_chat.id
-
-    # Get the history of messages in the conversation
-    history = update.messages.getHistory
-
-    # Save the history to a file
-    with open("history.json", "w") as f:
-        json.dump(history, f)
-
-
-def send_message(update: Update, context: CallbackContext):
-    text = str(update.message.text).lower()
-    chat_id = update.effective_chat.id
-    context.bot.send_message(chat_id=chat_id, text=text)
-
-
 def handle_message(update: Update, context: CallbackContext):
     text = str(update.message.text).lower()
     response = R.sample_response(text)
     update.message.reply_text(response)
+    # Get the message object
+    message = update.message
+
+    # Get the chat ID of the conversation
+    chat_id = message.chat_id
+
+    # Get the message text, sender's username, and current time
+    text = message.text
+    username = message.from_user.username
+    now = datetime.datetime.now()
+
+    # Write the message to an HTML file
+    with open("chat_history.html", "a", encoding='utf-8') as html_file:
+        html_file.write('<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<title>Save Chatbot '
+                        'Telegram</title>\n</head>\n<body>\n')
+        html_file.write(
+            f"<p><b>{html.escape(username)}</b> ({now.strftime('%Y-%m-%d %H:%M:%S')}): {html.escape(text)} </p>\n"
+            f"</body>\n")
 
 
 # Function dùng để xác định lỗi gì khi có thông báo lỗi
@@ -179,15 +187,13 @@ def main():
     dp.add_handler(CommandHandler("news", news_command))
     dp.add_handler(CommandHandler("image", photo_command))
     dp.add_handler(CommandHandler("send", file_command))
-    dp.add_handler(CommandHandler("translate", translate_command))
     dp.add_handler(CommandHandler("imagee", imgRandom_command))
     dp.add_handler(CommandHandler("price", price_command))
     dp.add_handler(CommandHandler("weather", weather_command))
-    dp.add_handler(CommandHandler("save", export_history))
     dp.add_handler(CallbackQueryHandler(button_press))
-    dp.add_handler(CommandHandler("ask1", ask_question))
+    dp.add_handler(CommandHandler("ask", ask_question))
+    dp.add_handler(CommandHandler('translate', translate_command))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
-    dp.add_handler(MessageHandler(Filters.text, send_message))
     dp.add_error_handler(error)
 
     # Start the bot
