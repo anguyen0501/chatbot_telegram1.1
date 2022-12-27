@@ -167,7 +167,7 @@ def handle_message(update: Update, context: CallbackContext):
 
     # Write the message to an HTML file
     with open("chat_history.html", "a", encoding='utf-8') as html_file:
-        html_file.write('<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<title>Save Chatbot '
+        html_file.write('<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<title>Save History Chatbot '
                         'Telegram</title>\n</head>\n<body>\n')
         html_file.write(
             f"<p><b>{html.escape(username)}</b> ({now.strftime('%Y-%m-%d %H:%M:%S')}): {html.escape(text)} </p>\n"
