@@ -14,11 +14,18 @@ print("Bot Starting....")
 
 
 def start_command(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(f'Chào {update.effective_user.first_name}')
+    update.message.reply_text(f'Xin chào {update.effective_user.first_name}, đây là bot chat tự động, vui lòng /help '
+                              f'để được giúp đỡ !!!')
 
 
 def help_command(update: Update, context: CallbackContext):
-    update.message.reply_text("Bạn muốn tôi giúp gì? \n 1. Đọc báo -> /news <số lượng>")
+    update.message.reply_text("Bạn muốn tôi giúp gì? "
+                              "\n 1. Đọc báo -> /news <số lượng>"
+                              "\n 2. Xem thời tiết -> /weather <location>"
+                              "\n 3. Bức ảnh bất kì -> /imagee"
+                              "\n 4. Xem giá BTC -> /price"
+                              "\n 4. Dịch ngôn ngữ -> /translate"
+                              "\n 5. Câu đố -> /ask1")
 
 
 def news_command(update: Update, context: CallbackContext):
