@@ -9,3 +9,4 @@
     5. Dịch ngôn ngữ
     6. Câu đố [Ví dụ]
     7. Tìm kiếm Youtube
+    8. Tự động lưu lịch sử chat
