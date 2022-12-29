@@ -5,7 +5,7 @@
 <p align="center">
     <strong><a href="README.md">Readme</a></strong>
     •
-    <strong><a href="">Discord</a></strong>
+    <strong><a href="https://ut.edu.vn/">UTH</a></strong>
     •
     <strong><a href="">Facebook</a></strong>
 </p>
