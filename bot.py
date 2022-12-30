@@ -1,6 +1,6 @@
 import Constants as keys
 import Response as R
-from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, Filters, CallbackQueryHandler
 import json
 import telegram
@@ -29,7 +29,10 @@ def help_command(update: Update, context: CallbackContext):
                               "\n 4. Xem giá BTC -> /price"
                               "\n 4. Dịch ngôn ngữ -> /translate"
                               "\n 5. Câu đố -> /ask1"
-                              "\n 6. Xem youtube -> /youtube [tên muốn tìm]")
+                              "\n 6. Xem youtube -> /youtube [tên muốn tìm]"
+                              "\n 7. Gửi file -> /send_file"
+                              "\n 8. Gửi mp3 -> /send_audio"
+                              "\n 9. Gửi video -> /send_video")
 
 
 def news_command(update: Update, context: CallbackContext):
@@ -52,7 +55,12 @@ def file_command(update: Update, context: CallbackContext) -> None:
 
 def audio_command(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    context.bot.send_audio(chat_id=chat_id, audio=open('audio.mp3', 'rb'))
+    context.bot.send_audio(chat_id=chat_id, audio=open('Mp3_File/audio.mp3', 'rb'))
+
+
+def video_command(update: Update, context: CallbackContext) -> None:
+    chat_id = update.message.chat_id
+    context.bot.send_video(chat_id=chat_id, video=open('video.mp4', 'rb'))
 
 
 bot = telegram.Bot(token=keys.API_KEY)
@@ -208,8 +216,9 @@ def main():
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("news", news_command))
-    dp.add_handler(CommandHandler("send", file_command))
+    dp.add_handler(CommandHandler("send_file", file_command))
     dp.add_handler(CommandHandler("send_audio", audio_command))
+    dp.add_handler(CommandHandler("send_video", video_command))
     dp.add_handler(CommandHandler("imagee", imgRandom_command))
     dp.add_handler(CommandHandler("price", price_command))
     dp.add_handler(CommandHandler("weather", weather_command))
