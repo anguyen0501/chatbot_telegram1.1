@@ -50,6 +50,11 @@ def file_command(update: Update, context: CallbackContext) -> None:
     context.bot.send_document(chat_id, file)
 
 
+def audio_command(update: Update, context: CallbackContext) -> None:
+    chat_id = update.message.chat_id
+    context.bot.send_audio(chat_id=chat_id, audio=open('audio.mp3', 'rb'))
+
+
 bot = telegram.Bot(token=keys.API_KEY)
 
 
@@ -204,6 +209,7 @@ def main():
     dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CommandHandler("news", news_command))
     dp.add_handler(CommandHandler("send", file_command))
+    dp.add_handler(CommandHandler("send_audio", audio_command))
     dp.add_handler(CommandHandler("imagee", imgRandom_command))
     dp.add_handler(CommandHandler("price", price_command))
     dp.add_handler(CommandHandler("weather", weather_command))
