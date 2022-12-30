@@ -15,26 +15,29 @@ from Method.Youtube.Youtube import search_youtube
 print("Bot Starting....")
 
 
+# Tạo command /start
 def start_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f'Xin chào {update.effective_user.first_name}, đây là bot chat tự động phiên bản đầu '
                               f'tiên, vui lòng /help '
                               f'để được giúp đỡ !!! Xin cảm ơn')
 
 
+# Tạo command /help
 def help_command(update: Update, context: CallbackContext):
-    update.message.reply_text("Bạn muốn tôi giúp gì? "
-                              "\n 1. Đọc báo -> /news <số lượng>"
+    update.message.reply_text("\n 1. Đọc báo -> /news <số lượng>"
                               "\n 2. Xem thời tiết -> /weather <location>"
                               "\n 3. Bức ảnh bất kì -> /imagee"
                               "\n 4. Xem giá BTC -> /price"
-                              "\n 4. Dịch ngôn ngữ -> /translate"
-                              "\n 5. Câu đố -> /ask1"
-                              "\n 6. Xem youtube -> /youtube [tên muốn tìm]"
-                              "\n 7. Gửi file -> /send_file"
-                              "\n 8. Gửi mp3 -> /send_audio"
-                              "\n 9. Gửi video -> /send_video")
+                              "\n 5. Hỏi câu hỏi về trường -> nhập câu hỏi bạn muốn hỏi"
+                              "\n 6. Câu đố -> /ask1"
+                              "\n 7. Xem youtube -> /youtube [tên muốn tìm]"
+                              "\n 8. Thông báo thời gian -> time"
+                              "\n 9. Gửi file -> /send_file"
+                              "\n 10. Gửi mp3 -> /send_audio"
+                              "\n 11. Gửi video -> /send_video")
 
 
+# Tạo hàm tin tức
 def news_command(update: Update, context: CallbackContext):
     try:
         limit_news = int(context.args[0])  # Lấy tham số từ input truyền vào -> cào về bao nhiêu tin
@@ -47,20 +50,23 @@ def news_command(update: Update, context: CallbackContext):
         update.message.reply_text('Vui lòng chọn số lượng tin hiển thị!!')
 
 
+# Tạo command gửi file
 def file_command(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     file = open('filetxt', 'rb')
     context.bot.send_document(chat_id, file)
 
 
+# Tạo command gửi audio
 def audio_command(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     context.bot.send_audio(chat_id=chat_id, audio=open('Mp3_File/audio.mp3', 'rb'))
 
 
+# Tạo command gửi video
 def video_command(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    context.bot.send_video(chat_id=chat_id, video=open('video.mp4', 'rb'))
+    context.bot.send_video(chat_id=chat_id, video=open('Video_File/video.mp4', 'rb'))
 
 
 bot = telegram.Bot(token=keys.API_KEY)
@@ -85,6 +91,7 @@ def translate_command(update, context) -> None:
     bot.send_message(chat_id=chat_id, text=translated_text)
 
 
+# Tạo câu trắc nghiệm
 # Define the correct answer and the options
 correct_answer = "Paris"
 options = ["Paris", "Berlin", "Rome", "London"]
@@ -108,6 +115,7 @@ def button_press(update, context):
         context.bot.send_message(chat_id=chat_id, text="Wrong guess.")
 
 
+# Tạo câu trắc nghiệm
 # Define a function to handle the /ask_question command
 def ask_question(update, context):
     # Get the chat ID of the conversation
@@ -129,6 +137,7 @@ def ask_question(update, context):
     context.bot.send_message(chat_id=chat_id, text=question, reply_markup=keyboard)
 
 
+# Tạo ảnh random từ trang web unsplash
 def imgRandom_command(update, context):
     # Make a request to the random image API
     response = requests.get("https://source.unsplash.com/random")
@@ -136,6 +145,7 @@ def imgRandom_command(update, context):
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=response.content)
 
 
+# Tạo command gửi giá BTC từ web binance
 client = ccxt.binance()
 
 
@@ -150,6 +160,7 @@ def price_command(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=f"Giá hiện tại của Bitcoin là ${price:.2f}.")
 
 
+# Tạo command gửi thời tiết cập nhật liên tục
 def weather_command(update, context):
     # Get the chat ID of the conversation
     chat_id = update.effective_chat.id
