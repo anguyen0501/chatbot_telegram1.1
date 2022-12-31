@@ -37,7 +37,7 @@
 ## Python package manager :
 - **Telegram :**
   - Update
-     > This will invoke every time a bot receives an update i.e. message or command and will send the user a message.
+     > là một loại handler trong thư viện python-telegram-bot dùng để xử lý các tin nhắn đầu tiên trong một cuộc trò chuyện với bot. Nó nhận một chuỗi làm tham số và chỉ xử lý các tin nhắn bắt đầu bằng chuỗi đó.
 - **python-telegram-bot :** 
   - Updater
       > This will contain the API key we got from BotFather to specify in which bot we are adding functionalities to using our python code.
